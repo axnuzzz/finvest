@@ -1,28 +1,45 @@
 import streamlit as st
-
 from agent import financial_react_agent
 
+AGENT_NAME = "Finvest AI"
 
-# Streamlit UI
-st.title("Financial Analyst")
+# Streamlit UI configuration
+st.set_page_config(
+    page_title=AGENT_NAME,
+    page_icon="🦙",
+    layout="centered",
+    initial_sidebar_state="auto",
+    menu_items=None,
+)
 
-# Initialize session state
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+st.title(f"{AGENT_NAME} 💸💰")
+st.caption(f"🤖 Chat with the {AGENT_NAME} 🔌 by Y-Finance and Llama3")
 
-# Display conversation history
+
+if "messages" not in st.session_state.keys():  # Initialize the chat messages history
+    st.session_state.messages = [
+        {
+            "role": "assistant",
+            "content": f"🤖 Chat with the {AGENT_NAME} 🔌 by Y-Finance and Llama3",
+        }
+    ]
+
+
+if "react_agent" not in st.session_state.keys():  # Initialize the chat engine
+    st.session_state.react_agent = financial_react_agent
+
+if prompt := st.chat_input("Your question"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
 for message in st.session_state.messages:
-    st.write(f"{message['role']}: {message['content']}")
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
 
-# User input
-user_input = st.text_input("You: ", "")
+if st.session_state.messages[-1]["role"] != "assistant":
+    with st.chat_message("assistant"):
+        response_stream = st.session_state.react_agent.stream_chat(prompt)
+        st.write_stream(response_stream.response_gen)
 
-if user_input:
-    st.session_state.messages.append({"role": "User", "content": user_input})
+        message = {"role": "assistant", "content": response_stream.response}
 
-    # Get response from the agent
-    response = financial_react_agent.chat(user_input)
-    st.session_state.messages.append({"role": "Agent", "content": response})
-
-    # Clear user input
-    st.experimental_rerun()
+        st.session_state.messages.append(message)

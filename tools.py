@@ -13,6 +13,7 @@ llm = get_groq_lm()
 def save_output(
     data: DataFrame, description: str, save_path: Optional[str] = None
 ) -> None:
+    return
     if save_path:
         data.to_csv(save_path)
         print(f"{description} saved to {save_path}")
