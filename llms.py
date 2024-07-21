@@ -1,9 +1,14 @@
+import os
+from dotenv import load_dotenv
+
 from llama_index.llms.groq import Groq
 from llama_index.llms.together import TogetherLLM
 
+load_dotenv()
 
-TOGETHER_API_KEY = ""
-GROQ_API_KEY = ""
+
+TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 
 def get_together_lm():
