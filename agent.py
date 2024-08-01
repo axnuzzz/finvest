@@ -1,4 +1,4 @@
-from llama_index.core.agent import ReActAgent
+from llama_index.core.agent.legacy.react.base import ReActAgent
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.tools import FunctionTool
 

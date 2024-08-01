@@ -1,8 +1,8 @@
 from llama_index.core import PromptTemplate
 import yfinance as yf
 from pandas import DataFrame
-from typing import Annotated, Callable, Any, Optional
-
+from typing import Callable, Any, Optional
+from typing_extensions import Annotated
 
 from llms import get_groq_lm
 
